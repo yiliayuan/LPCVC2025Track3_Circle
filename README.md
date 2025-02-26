@@ -143,7 +143,7 @@ In the previous section, we profiled our model on real devices. Once we are sati
         - Click "SHARE" at the top right corner.
         - Add the email [lowpowervision@gmail.com](lowpowervision@gmail.com). 
     
-- **Step2.** Fill up a submission form at [this link](https://forms.gle/SFoo9cqW9YvPbQtn6).
+- **Step2.** Fill up a submission form at [this link](https://lpcv.ai/2025LPCVC/submission/track3).
 
 
 Once the submission form is uploaded, the model (specified by the compile job id) will be evaluated and the ranking result will be available on our [leaderboard](https://lpcv.ai/2025LPCVC/leaderboard/track3). 
