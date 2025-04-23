@@ -175,7 +175,7 @@ class DepthAnythingV2(nn.Module):
     
     def forward(self, x):
         # resize x (WidthxHeight=640x480) to Depth-Anythig-V2's original input resolution (518x518). 
-        x = F.interpolate(x, (518, 518), mode="bilinear", align_corners=True)
+        x = F.interpolate(x, (350, 350), mode="bilinear", align_corners=True)
         
         # input pre-processing
         mean = torch.tensor([[[[123.6750]], [[116.2800]], [[103.5300]]]])
@@ -192,7 +192,8 @@ class DepthAnythingV2(nn.Module):
         # resize model's output to the required resolution (WidthxHeight=640x480)
         depth = F.interpolate(depth, (480, 640), mode="bilinear", align_corners=True)
         # normalize the output to ensure the range of [0, 1]
-        depth = (depth - depth.min()) / (depth.max() - depth.min()) 
+        # reverse the normalized results for smaller closer. 
+        depth = 1 - (depth - depth.min()) / (depth.max() - depth.min()) 
 
         # ensure the model's output is a 4D tensor, (Batch, 1, H, W)
         return depth

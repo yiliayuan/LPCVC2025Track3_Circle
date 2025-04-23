@@ -176,13 +176,23 @@ class DepthAnythingV2(nn.Module):
         self.depth_head = DPTHead(self.pretrained.embed_dim, features, use_bn, out_channels=out_channels, use_clstoken=use_clstoken)
     
     def forward(self, x):
+        x = F.interpolate(x, (336, 336), mode="bilinear", align_corners=True)
+        
+        # input pre-processing
+        mean = torch.tensor([[[[123.6750]], [[116.2800]], [[103.5300]]]])
+        std = torch.tensor([[[[58.3950]], [[57.1200]], [[57.3750]]]])
+        x = (x - mean)/std
+
         patch_h, patch_w = x.shape[-2] // 14, x.shape[-1] // 14
         
         features = self.pretrained.get_intermediate_layers(x, self.intermediate_layer_idx[self.encoder], return_class_token=True)
         
         depth = self.depth_head(features, patch_h, patch_w) * self.max_depth
         
-        return depth.squeeze(1)
+        depth = F.interpolate(depth, (480, 640), mode="bilinear", align_corners=True)
+        
+        # return depth.squeeze(1)
+        return depth
     
     @torch.no_grad()
     def infer_image(self, raw_image, input_size=518):
